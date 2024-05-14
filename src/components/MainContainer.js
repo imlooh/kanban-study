@@ -26,10 +26,12 @@ const MainContainer = (props) => {
         props.updateUserData(props.userData);
     }
 
-    const updateUserData = (userData) => {
-        setUserData(userData);
+    const updateUserData = (newUserData) => {
+        setUserData(newUserData);
+        props.userData = userData;
+        
         forceReload();
-        props.updateUserData(userData);
+        props.updateUserData(props.userData);
     }
 
     const [reloadCounter, setReloadCounter] = useState(0);

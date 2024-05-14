@@ -75,15 +75,23 @@ function App() {
 
   //save the data if it changes
   useEffect(() => {
-
+    forceReload();
   }, [userData])
+
+  const [reloadCounter, setReloadCounter] = useState(0);
+
+  // Function to force reload sibling components
+  const forceReload = () => {
+      // Increment the reload counter to trigger a re-render
+      setReloadCounter(prevCounter => prevCounter + 1);
+  };
 
   return (
     <div className="App container">
       {/* <Header /> */}
       <Router>
         <Routes>
-          <Route exact path='/' element={<MainContainer userData={userData} updateUserData={updateUserData} />} />
+          <Route exact path='/' element={<MainContainer key={reloadCounter} userData={userData} updateUserData={updateUserData} />} />
         </Routes>
       </Router>
       

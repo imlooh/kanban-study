@@ -40,6 +40,14 @@ function TopNavigation(props) {
         props.updateUserData(props.userData);
     }
 
+    const deleteAllNotesHandler = () => {
+        //turn this into a popup prompt later!
+        props.board.stickyNotes = [];
+        setNotes(props.board.stickyNotes);
+        props.updateBoardData(props.board);
+        
+    }
+
     return(
         <div className='clearfix'>
             <ul className='nav nav-tabs'>
@@ -51,7 +59,7 @@ function TopNavigation(props) {
                     <a className='nav-link active'><Icons.Image></Icons.Image> Board Image</a></li>
                 <li className='nav-item'>
                     <a className='nav-link active'><Icons.PaintBucket></Icons.PaintBucket> Board Color</a></li>
-                <li className='nav-item'>
+                <li className='nav-item' onClick={deleteAllNotesHandler}>
                     <a className='nav-link active'><Icons.Trash></Icons.Trash> Delete All</a></li>
                 <li className='nav-item'>
                     <a className='nav-link active'><Icons.CardText></Icons.CardText> Flip All</a></li>

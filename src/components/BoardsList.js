@@ -10,7 +10,7 @@ function BoardsList(props) {
     });
 
     return(
-        <ul className='list-group'>
+        <ul className='list-group BoardsList'>
 
             {boardsList}
         </ul>

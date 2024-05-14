@@ -3,6 +3,7 @@ import { useState, useRef } from 'react';
 import Draggable from 'react-draggable';
 import { ResizableBox } from 'react-resizable';
 import * as Icons from 'react-bootstrap-icons';
+import StickyNoteButtons from './StickyNoteButtons';
 
 function StickyNote(props) {
     const note = props.note;
@@ -43,7 +44,8 @@ function StickyNote(props) {
                         backgroundColor: note?.color || 'none'
                     }
                 }>
-                    <div dangerouslySetInnerHTML={{ __html: note?.front}} />
+                    <StickyNoteButtons/>
+                    <div className='sticky-note-front' dangerouslySetInnerHTML={{ __html: note?.front}} />
                 </ResizableBox>
         </Draggable>
     )
