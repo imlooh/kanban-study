@@ -4,6 +4,8 @@ import * as Icons from 'react-bootstrap-icons';
 
 function TopNavigation(props) {
     const [notes, setNotes] = useState(props.board.stickyNotes);
+    const [boards, setBoards] = useState(props.userData.boards);
+
     const newNoteHandler = () => {
         props.board?.stickyNotes.push(
             {
@@ -22,12 +24,28 @@ function TopNavigation(props) {
         props.updateBoardData(props.board);
     };
 
+    const newBoardHandler = () => {
+        props.userData?.boards.push(
+            {
+                "uuid": crypto.randomUUID(),
+                "title": "Untitled Board",
+                "stickyNotes": [],
+                "position": 0,
+                "boardColor": "#333",
+                "boardImage": "none"
+            }
+        )
+
+        setBoards(props.userData);
+        props.updateUserData(props.userData);
+    }
+
     return(
         <div className='clearfix'>
             <ul className='nav nav-tabs'>
                 <li className='nav-item' onClick={newNoteHandler}>
                     <a className='nav-link active'><Icons.PlusCircle></Icons.PlusCircle> Note</a></li>
-                <li className='nav-item'>
+                <li className='nav-item' onClick={newBoardHandler}>
                     <a className='nav-link active'><Icons.PlusCircle></Icons.PlusCircle> Board</a></li>
                 <li className='nav-item'>
                     <a className='nav-link active'><Icons.Image></Icons.Image> Board Image</a></li>
