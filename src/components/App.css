@@ -6,9 +6,15 @@
   cursor: pointer;
 }
 
+.MainContainer {
+  width: 1300px;
+  position: relative;
+}
+
 .sticky-note {
   border: 1px solid black;
   border-top: 20px solid black;
   padding: 10px;
   color: black;
+  position: relative;
 }

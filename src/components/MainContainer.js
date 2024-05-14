@@ -26,13 +26,7 @@ const MainContainer = (props) => {
     }, [currentBoardTitle]);
 
     return(
-        <div className='MainContainer' 
-            style={
-                {
-                    width: 1300 + 'px',
-                    position: 'relative'
-                }
-            }>
+        <div className='MainContainer container'>
             <BoardTitle boardTitle={defaultBoard.title} currentBoardTitle={updateCurrentBoardTitle}/>
             <BoardsList />
             <TopNavigation />

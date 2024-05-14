@@ -1,6 +1,8 @@
 
 import { useRef } from 'react';
 import Draggable from 'react-draggable';
+import { ResizableBox } from 'react-resizable';
+import * as Icons from 'react-bootstrap-icons';
 
 function StickyNote(props) {
     const note = props.note;
@@ -13,22 +15,24 @@ function StickyNote(props) {
     }
 
     return(
-    <Draggable
-        bounds='parent'
-        handle=".handle"
-        onDrag={handleDrag}>  
-        <div className='float-start handle sticky-note'
-            style={
-                {
-                    backgroundColor: note?.color || 'none',
-                    width: 200 + 'px',
-                    height: 200 + 'px',
-                    position: 'relative'
-                }
-            }
-            dangerouslySetInnerHTML={{ __html: note?.front}}
-        ></div>
-    </Draggable>
+        <Draggable
+            bounds='parent'
+            handle=".handle"
+            onDrag={handleDrag}>
+            <ResizableBox
+                width={note?.width || 200}
+                height={note?.height || 200}
+                minConstraints={[100, 100]}
+                handle={<Icons.TextareaResize></Icons.TextareaResize>}
+                className='handle sticky-note'
+                style={
+                    {
+                        backgroundColor: note?.color || 'none',
+                    }
+                }>
+                    <div dangerouslySetInnerHTML={{ __html: note?.front}} />
+                </ResizableBox>
+        </Draggable>
     )
 }
 

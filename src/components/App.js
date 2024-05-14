@@ -24,7 +24,9 @@ function App() {
                 "uuid": noteUuid,
                 "front": "<h2>Test</h2>",
                 "back": "<h2>Test Back</h2>",
-                "color": "pink"
+                "color": "pink",
+                "width": 200,
+                "height": 200
               },
               {
                 "uuid": noteUuid,
