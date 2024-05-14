@@ -1,12 +1,26 @@
-import { useRef } from 'react';
+import { useState, useRef } from 'react';
 import StickyNote from './StickyNote';
 
 function Board(props) {
     const boundingRef = useRef(null);
+
+    const [notes, setNotes] = useState(props.board.stickyNotes);
     
-    const getNotes = props.board.stickyNotes.map((note) => {
+    const updateNotes = (note) => {
+        props.board.stickyNotes.forEach((n) => {
+            if(note.uuid == n.uuid) {
+                n.width = note.width;
+                n.height = note.height;
+                //add color and text here later
+            }
+            setNotes(props.board.stickyNotes);
+            props.updateBoardData(props.board);
+        });
+    }
+
+    const getNotes = notes.map((note) => {
         return(  
-            <StickyNote boundingRef={boundingRef} key={note?.uuid} note={note}></StickyNote>
+            <StickyNote updateNotes={updateNotes} boundingRef={boundingRef} key={note?.uuid} note={note}></StickyNote>
         )
     });
 

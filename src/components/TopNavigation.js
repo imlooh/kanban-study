@@ -1,10 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import * as Icons from 'react-bootstrap-icons';
 
 function TopNavigation(props) {
+    const [notes, setNotes] = useState(props.board.stickyNotes);
     const newNoteHandler = () => {
-        
+        props.board?.stickyNotes.push(
+            {
+                "uuid": crypto.randomUUID(),
+                "front": "<h2>New Note</h2>",
+                "back": "<h2>Back</h2>",
+                "color": "pink",
+                "width": 200,
+                "height": 200,
+                "top": 0,
+                "left": 0
+              }
+        );
+
+        setNotes(props.board.stickyNotes);
+        props.updateBoardData(props.board);
     };
 
     return(

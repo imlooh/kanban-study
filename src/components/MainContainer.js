@@ -8,29 +8,38 @@ import Board from './Board';
 const MainContainer = (props) => {
     let defaultBoard = props.userData?.boards.filter(board => board?.uuid === props.userData.currentBoard)[0];
 
-    const [currentBoardTitle, setCurrentBoardTitle] = useState(defaultBoard.title);
+    const [currentBoardData, setCurrentBoardData] = useState(defaultBoard);
 
-    const updateCurrentBoardTitle = (boardName) => {
-        setCurrentBoardTitle(boardName);
-    }
-    
-    //save when currentBoard (board title) changes!
-    useEffect(() => {
+    const updateCurrentBoardData = (board) => {
+        console.log(board);
+        setCurrentBoardData(board);
+        
         props.userData.boards.forEach((board) => {
             if(board.uuid == props.userData.currentBoard) {
-                board.title = currentBoardTitle;
+                board = currentBoardData;
+                console.log(board);
             }
         })
         
+        forceReload();
         props.updateUserData(props.userData);
-    }, [currentBoardTitle]);
+    }
+
+    const [reloadCounter, setReloadCounter] = useState(0);
+
+    // Function to force reload sibling components
+    const forceReload = () => {
+        // Increment the reload counter to trigger a re-render
+        setReloadCounter(prevCounter => prevCounter + 1);
+    };
+
 
     return(
         <div className='MainContainer container'>
-            <BoardTitle boardTitle={defaultBoard.title} currentBoardTitle={updateCurrentBoardTitle}/>
+            <BoardTitle board={defaultBoard} updateBoardData={updateCurrentBoardData}/>
             <BoardsList />
-            <TopNavigation />
-            <Board board={defaultBoard}/>
+            <TopNavigation board={defaultBoard} updateBoardData={updateCurrentBoardData}/>
+            <Board board={defaultBoard} updateBoardData={updateCurrentBoardData}/>
         </div>
     )
 }

@@ -12,7 +12,6 @@ function App() {
   //returns a skeleton of data for a new user
   const createUserData = () => {
     let newUuid = crypto.randomUUID();
-    let noteUuid = crypto.randomUUID();
     return( 
       {
         "boards": [
@@ -21,18 +20,24 @@ function App() {
             "title": "Untitled Board",
             "stickyNotes": [
               {
-                "uuid": noteUuid,
+                "uuid": crypto.randomUUID(),
                 "front": "<h2>Test</h2>",
                 "back": "<h2>Test Back</h2>",
                 "color": "pink",
                 "width": 200,
-                "height": 200
+                "height": 200,
+                "top": 200,
+                "left": 0
               },
               {
-                "uuid": noteUuid,
+                "uuid": crypto.randomUUID(),
                 "front": "<h2>Test 2</h2>",
                 "back": "<h2>Test Back</h2>",
-                "color": "pink"
+                "color": "pink",
+                "width": 200,
+                "height": 200,
+                "top": 0,
+                "left": 0
               }
             ],
             "position": 0,
@@ -63,6 +68,7 @@ function App() {
 
   //handler that we pass to other components to manage the user data
   const updateUserData = (newUserData) => {
+    console.log('updateUserData');
     localStorage.setItem('userData', JSON.stringify(userData));
     setUserData(newUserData);
   }

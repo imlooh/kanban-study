@@ -4,7 +4,9 @@ function BoardTitle(props) {
     const contentRef = useRef(null);
 
     const handleBlur = () => {
-        props.currentBoardTitle(contentRef.current.textContent);
+        
+        props.board.title = contentRef.current.textContent;
+        props.updateBoardData(props.board);
     };
 
     return(
@@ -19,7 +21,7 @@ function BoardTitle(props) {
                 marginTop: 1 + 'em',
             }}
             >
-                {props.boardTitle}
+                {props.board.title}
         </h1>
     )
 }
