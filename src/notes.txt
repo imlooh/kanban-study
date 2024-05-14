@@ -1,0 +1,45 @@
+Kanban in React
+
+Data Structure (JSON)
+data: {
+    boards: [
+    {
+        uuid: uuid
+        title: ""
+        stickynotes: [
+            {
+                uuid: uuid
+                front: "" //html
+                back: "" //html
+                width: px
+                height: px
+                pos_x: number
+                pos_y: number
+                color: HTML color
+                locked: false //can be moved or not
+            }
+        ], 
+        position: number
+        boardColor: HTML color
+        boardImage: image file
+    }],
+    theme: "" //theme name
+    currentBoard: uuid
+    language: "en" (default)
+    
+}
+
+Components
+* App
+* BoardTitle
+* TopNavigation
+    * TopTab
+* Board
+    * StickyNote
+        * StickyNoteButtons
+        * StickyNoteFront
+        * StickyNoteBack
+        * StickyNoteRTE //rich text editor buttons
+* BoardList
+    * BoardTab
+    * BoardsNav

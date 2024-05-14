@@ -1,0 +1,48 @@
+import React from 'react';
+import Draggable from 'react-draggable';
+
+class DraggableElement extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      parentWidth: 0,
+      parentHeight: 0,
+    };
+    this.parentRef = React.createRef();
+  }
+
+  componentDidMount() {
+    // Get parent container dimensions
+    const parentElement = this.parentRef.current;
+    const parentWidth = parentElement.offsetWidth;
+    const parentHeight = parentElement.offsetHeight;
+    this.setState({ parentWidth, parentHeight });
+  }
+
+  calculateBounds = () => {
+    const { parentWidth, parentHeight } = this.state;
+    return {
+      left: 0,
+      top: 0,
+      right: parentWidth - this.draggableElement.offsetWidth,
+      bottom: parentHeight - this.draggableElement.offsetHeight,
+    };
+  };
+
+  render() {
+    return (
+      <div ref={this.parentRef} style={{ width: '300px', height: '300px', border: '1px solid black', position: 'relative' }}>
+        <Draggable bounds={this.calculateBounds()}>
+          <div
+            ref={el => (this.draggableElement = el)}
+            style={{ width: '50px', height: '50px', backgroundColor: 'blue', position: 'absolute', cursor: 'move' }}
+          >
+            Drag me!
+          </div>
+        </Draggable>
+      </div>
+    );
+  }
+}
+
+export default DraggableElement;

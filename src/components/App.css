@@ -1,0 +1,14 @@
+.nav-item {
+  margin-right: 15px;
+}
+
+.nav-item:hover {
+  cursor: pointer;
+}
+
+.sticky-note {
+  border: 1px solid black;
+  border-top: 20px solid black;
+  padding: 10px;
+  color: black;
+}
