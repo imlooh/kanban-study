@@ -25,30 +25,62 @@ async function run() {
     await client.db("sample_mflix").command({ ping: 1 });
     
   } finally {
-    app.get('/api/test', async (req, res) => {
-        let collection = await client.db("sample_mflix").collection("comments");
-        let results = await collection.find({})
-            .limit(1);
-        res.send(results).status(200);
-    });
-
+    //get a single board by id
     app.get('/api/boards/board', async (req, res) => {
-      let collection = await client.db("kanban").collection("boards");
+      let boards = await client.db("kanban").collection("boards");
       let query = { _id: new ObjectId(req.query._id) };
-      let results = await collection.find(query)
+      let results = await boards.find(query)
         .limit(1)
         .toArray();
       res.send(results).status(200);
     });
 
+    //get all boards that belong to a user
+    app.get('/api/user/boards', async (req, res) => {
+      let users = await client.db("kanban").collection("users");
+      let query = {_id: new ObjectId(req.query._id)};
+      let results = await users.find(query)
+        .limit(1)
+        .toArray();
+
+      res.send(results[0].boards).status(200);
+    });
+
+    //update the board title
     app.post('/api/boards/board/title', async (req, res) => {
       let collection = await client.db("kanban").collection("boards");
-      let query = { id: new ObjectId(req.query._id)};
+      let query = { _id: new ObjectId(req.query._id)};
+      let updates = {
+        $set: { title: req.query.title }
+      };
+      let result = await collection.updateOne(query, updates);
+      res.send(result).status(200);
+    });
+
+    //add a note
+    app.post('/api/boards/board/addnote', async (req, res) => {
+      let collection = await client.db("kanban").collection("boards");
+      let query = { _id: new ObjectId(req.query._id)};
+      let updates = {
+        $push: { 
+          stickyNote: {
+            color: req.query.color,
+            front: req.query.front,
+            back: req.query.back,
+            width: req.query.width,
+            height: req.query.height,
+            top: req.query.top,
+            left: req.query.left
+          } 
+        }
+      };
+      let result = await collection.updateOne(query, updates);
+      res.send(result).status(200);
     });
     
     app.listen(PORT, 'localhost', (error) =>{ 
         if(!error) 
-            console.log(`Server is Successfully Running, and App is listening on port ${PORT}`); 
+            console.log(`Server is listening on port ${PORT}`); 
         else 
             console.log("Error occurred, server can't start", error); 
         } 
