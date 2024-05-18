@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
 import * as Icons from 'react-bootstrap-icons';
 
 function TopNavigation(props) {

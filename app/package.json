@@ -7,7 +7,6 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.8",
-    "bootstrap": "^5.3.3",
     "express": "^4.19.2",
     "mongodb": "6.6",
     "react": "^18.3.1",
@@ -17,6 +16,8 @@
     "react-resizable": "^3.0.5",
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
+    "tailwind": "^4.0.0",
+    "tailwindcss": "^3.4.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

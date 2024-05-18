@@ -4,6 +4,7 @@ import Register from './Register';
 import Login from './Login';
 import Logout from './Logout';
 import MainContainer from './MainContainer';
+import './css/App.css';
 
 //import 'bootstrap/dist/css/bootstrap.css';
 //import './App.css';
@@ -14,11 +15,11 @@ function App() {
   
 
   return (
-    <div className="App container">
+    <div className="App">
       {/* <Header /> */}
       <Router>
         <Routes>
-          <Route exact path='/login' element={<Login /> } />
+          <Route exact path='/' element={<Login /> } />
           <Route exact path='/logout' element={<Logout /> } />
           <Route exact path='/register' element={<Register />}></Route>
         </Routes>
