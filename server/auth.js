@@ -11,10 +11,11 @@ function generateToken(userId) {
   return token;
 }
 
-// Middleware to verify JWT
 function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
+  console.log('Auth Header:', authHeader);  // Log the received auth header
   const token = authHeader && authHeader.split(' ')[1];
+  console.log('Token:', token);  // Log the extracted token
 
   if (!token) return res.sendStatus(401);
 
@@ -24,6 +25,7 @@ function authenticateToken(req, res, next) {
     next();
   });
 }
+
 
 // Function to extract user ID from JWT
 function getUserIdFromToken(token) {

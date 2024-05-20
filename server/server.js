@@ -11,9 +11,11 @@ const { MongoClient, ObjectId, ServerApiVersion  } = require('mongodb');
 const bcrypt = require('bcrypt');
 const saltRounds = 10; // Number of salt rounds for bcrypt
 const { generateToken, authenticateToken, getUserIdFromToken } = require('./auth');
+const cors = require('cors');
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -100,7 +102,7 @@ async function run() {
     });
 
     // Route to return user info except password and email if logged in
-    app.get('/api/users/me', authenticateToken, async (req, res) => {
+    app.get('/api/user/me', authenticateToken, async (req, res) => {
       const userId = req.user.userId;
       const db = client.db('kanban');
       const usersCollection = db.collection('users');
@@ -114,7 +116,7 @@ async function run() {
     });
 
     // Route to return user's email if logged in
-    app.get('/api/users/email', authenticateToken, async (req, res) => {
+    app.get('/api/user/email', authenticateToken, async (req, res) => {
       const userId = req.user.userId;
       const db = client.db('kanban');
       const usersCollection = db.collection('users');
@@ -127,8 +129,66 @@ async function run() {
       res.status(200).json({ email: user.email });
     });
 
+    app.get(`/api/users/boards`, authenticateToken, async(req, res) => {
+      console.log(req);
+      try {
+        const userId = req.user.userId;
+
+        if(userId) {
+          const db = client.db('kanban');
+          const usersCollection = db.collection('users');
+
+          const user = await usersCollection.findOne({ _id: new ObjectId(userId) }, { projection: { email: 0, _id: 0 } });
+          
+          if(!user) {
+            return res.status(404).json({error: `Could not find user in database`});
+          } else {
+            console.log('user in db');
+            return res.status(200).json({boards: user.boards})
+          }
+        } else {
+          return res.status(404).json({error: `User is not logged in!`});
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    })
+
+    app.get(`/api/user/board`, authenticateToken, async (req, res)  => {
+      const userId = req.user.userId;
+
+      if(userId) {
+        const boardId = req.query.boardId;
+        const db = client.db('kanban');
+        const usersCollection = db.collection('users');
+
+        const user = await usersCollection.findOne(
+          { _id: ObjectId(userId) }, 
+          { projection: 
+            { _id: 0, email: 0, password: 0, settings: 0, role: 0, activated: 0, boards: 1 } 
+          }
+        );
+
+        if(!user) {
+          return res.status(404).json({error: `Could not find user in database`});
+        } else {
+          const board = user.boards.filter((b) => {
+            return b._id === new ObjectId(boardId);
+          });
+  
+          if(!board) {
+            return res.status(404).json({error: `Board not found`});
+          } else {
+            return res.status(200).json({board: board});
+          }
+        }
+      } else {
+        return res.status(404).json({error: `User is not logged in!`});
+      }
+    })
+
     // Route to add a new board to the logged-in user's boards
-    app.post('/api/boards', authenticateToken, async (req, res) => {
+    app.post('/api/user/boards/new', authenticateToken, async (req, res) => {
       const userId = req.user.userId;
       const { title } = req.body;
       const db = client.db('kanban');

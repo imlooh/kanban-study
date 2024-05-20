@@ -7,9 +7,9 @@ import React, { useState, useEffect } from 'react';
  */
 function RelativeGroup(props) {
 
-    const getDropDown = props.data.map((d) => {
+    const getDropDown = props.data.map((d, i) => {
         return (
-            <a href={d?.href} className="block px-4 py-2 text-black hover:bg-gray-100">{d?.text}</a>
+            <a key={i} href={d?.href} className="block px-4 py-2 text-black hover:bg-gray-100">{d?.text}</a>
         )
     });
 

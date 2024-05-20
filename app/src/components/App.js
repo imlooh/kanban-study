@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import Register from './Register';
 import Landing from './Landing';
 import Logout from './Logout';
+import Login from './Login';
 import MainContainer from './MainContainer';
 import './css/App.css';
 
@@ -33,6 +34,7 @@ function App() {
         <Routes>
           <Route exact path='/' element={<Landing /> } isDarkMode={checkDarkMode} />
           <Route exact path='/logout' element={<Logout /> } />
+          <Route exact path='/login' element={<Login /> } />
           <Route exact path='/register' element={<Register />}></Route>
         </Routes>
       </Router>
