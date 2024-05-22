@@ -1,54 +1,62 @@
-
-import { useState, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Draggable from 'react-draggable';
 import { ResizableBox } from 'react-resizable';
-import * as Icons from 'react-bootstrap-icons';
-import StickyNoteButtons from './StickyNoteButtons';
+import './css/App.css';
 
 function StickyNote(props) {
-    const note = props.note;
+    const { note, updateNotes } = props;
+    const [position, setPosition] = useState({ x: note.left, y: note.top });
+    const [size, setSize] = useState({ width: note.width, height: note.height });
 
-    const handleResize = (event, {node, size, handle}) => {
-        note.width = size.width;
-        note.height = size.height;
-        props.updateNotes(note);
-    }
+    useEffect(() => {
+        setPosition({ x: note.left, y: note.top });
+        setSize({ width: note.width, height: note.height });
+    }, [note.left, note.top, note.width, note.height]);
 
-    const handleDragStop = (e, data) => {
-        note.left = data.x;
-        note.top = data.y;
-        props.updateNotes(note);
+    const handleResize = (event, { size }) => {
+        setSize({ width: size.width, height: size.height });
+        const updatedNote = { ...note, width: size.width, height: size.height };
+        //updateNotes(updatedNote);
     };
 
-    return(
+    const handleDragStop = (e, data) => {
+        if(data.x < 0) {
+            data.x = 0;
+        }
+
+        if(data.y < 0) {
+            data.y = 0;
+        }
+
+        setPosition({ x: data.x, y: data.y });
+        const updatedNote = { ...note, left: data.x, top: data.y };
+        //updateNotes(updatedNote);
+    };
+
+    return (
         <Draggable
-            bounds='parent'
-            handle=".handle"
-            onStop={(e, data) => handleDragStop(e, data)}
-            cancel=".note-resize-handle"
-            position={{x: note?.left || 0, y: note?.top || 0}}>
-            <ResizableBox
-                width={note?.width || 200}
-                height={note?.height || 200}
-                minConstraints={[100, 100]}
-                resizeHandles={['se']}
-                onResizeStop={handleResize}
-                handle={
-                    <Icons.ArrowsAngleExpand
-                        className='note-resize-handle'
-                        size={20}
-                    />}
-                className='handle sticky-note'
-                style={
-                    {
-                        backgroundColor: note?.color || 'none'
-                    }
-                }>
-                    <StickyNoteButtons/>
-                    <div className='sticky-note-front' dangerouslySetInnerHTML={{ __html: note?.front}} />
+            position={position}
+            onStop={handleDragStop}
+            cancel={'.react-resizable-handle'}
+            style={{position: 'relative'}}
+        >
+            <div style={{ width: size.width, height: size.height }}>
+                <ResizableBox
+                    width={size.width}
+                    height={size.height}
+                    minConstraints={[100, 100]} // Minimum size constraints
+                    onResizeStop={handleResize} // Use onResizeStop for smoother resizing
+                    resizeHandles={['se']} // Add resize handle at the southeast corner
+                    className={`${note.color} p-2 rounded-lg`}
+                >
+                    <div className="w-full h-full flex items-center justify-center">
+                        <span className="text-3xl sticky-note-front" dangerouslySetInnerHTML={{ __html: note?.front }}></span>
+                        <span className="text-3xl sticky-note-back" dangerouslySetInnerHTML={{ __html: note?.back }}></span>
+                    </div>
                 </ResizableBox>
+            </div>
         </Draggable>
-    )
+    );
 }
 
 export default StickyNote;

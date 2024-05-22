@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import StickyNote from './StickyNote';
 
 function Board(props) {
@@ -18,23 +18,15 @@ function Board(props) {
         });
     }
 
-    const getNotes = notes.map((note) => {
-        return(  
-            <StickyNote updateNotes={updateNotes} boundingRef={boundingRef} key={note?.uuid} note={note}></StickyNote>
-        )
-    });
-
     return (
-        <div ref={boundingRef} className='board border min-vh-70' style={
-            {
-                minHeight: 750 + 'px',
-                position: 'absolute', 
-                width: 'inherit',
-                overflow: 'auto'
-            }
-        }>
-        
-            {getNotes}
+        <div>
+            <h1 className="text-3xl font-bold mb-4">Chinese</h1>
+            <div className=" bg-blue-200 p-4 rounded-lg"  style={{width: '70vw', minHeight: '80vh', overflow: 'auto', position: 'absolute'}}> 
+                {/* Note Cards */}
+                {props.board.stickyNotes.map((note, index) => (
+                <StickyNote key={index} note={note}></StickyNote>
+                ))}
+            </div>
         </div>
     )
 }

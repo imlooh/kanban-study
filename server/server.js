@@ -190,22 +190,47 @@ async function run() {
     // Route to add a new board to the logged-in user's boards
     app.post('/api/user/boards/new', authenticateToken, async (req, res) => {
       const userId = req.user.userId;
-      const { title } = req.body;
       const db = client.db('kanban');
       const usersCollection = db.collection('users');
 
       const newBoard = {
         _id: new ObjectId(),
-        title,
+        title: 'Untitled Board',
         stickyNotes: [],
       };
 
-      const result = await usersCollection.updateOne({ _id: ObjectId(userId) }, { $push: { boards: newBoard } });
+      const result = await usersCollection.updateOne({ _id: new ObjectId(userId) }, { $push: { boards: newBoard } });
+      const user = await usersCollection.findOne({_id: new ObjectId(userId)});
       if (result.modifiedCount !== 1) {
         return res.status(404).json({ error: 'User not found or board not added' });
       }
 
-      res.status(201).json({ message: 'Board added successfully' });
+      res.status(201).json({ message: 'Board added successfully', boards: user.boards });
+      console.log('Added board!')
+    });
+
+    // Route to add a new board to the logged-in user's boards
+    app.post('/api/user/boards/delete', authenticateToken, async (req, res) => {
+      const userId = req.user.userId;
+      const db = client.db('kanban');
+      const usersCollection = db.collection('users');
+
+      const result = await usersCollection.updateOne(
+        { _id: new ObjectId(userId) }, 
+        { $pull: 
+          { boards: 
+            { _id: new ObjectId(req.query._id) } 
+          } 
+        }
+      );
+      const user = await usersCollection.findOne({_id: new ObjectId(userId)});
+
+      if (result.modifiedCount !== 1) {
+        return res.status(404).json({ error: 'User not found or board not removed' });
+      }
+
+      res.status(201).json({ message: 'Board deleted successfully', boards: user.boards });
+      console.log('Added board!')
     });
 
     // Route to add notes to a specified board (by _id)

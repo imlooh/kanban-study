@@ -8,7 +8,7 @@ function BoardTitle(props) {
         props.updateBoardData(props.board);
 
         await fetch(`/api/boards/board/title?` + new URLSearchParams({
-            _id: '66442bbe916b5eec6a91b9e0',
+            _id: props.boardId,
             title: props.board.title
         }), {'method': 'POST'})
             .then(response => response.json())

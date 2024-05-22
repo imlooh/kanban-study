@@ -11,6 +11,7 @@ function generateToken(userId) {
   return token;
 }
 
+//requires the token to be sent via headers
 function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
   console.log('Auth Header:', authHeader);  // Log the received auth header
